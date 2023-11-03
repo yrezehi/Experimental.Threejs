@@ -6,12 +6,13 @@
     ambientLight.intensity = 4;
     scene.add(ambientLight);
 
-    var camera = new THREE.PerspectiveCamera(5, window.innerWidth / window.innerHeight, .1, 300);
+    var camera = new THREE.PerspectiveCamera(5, window.innerWidth / window.innerHeight, .1, 500 );
     camera.position.set(0, 0, 300);
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio( window.devicePixelRatio );
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1;
@@ -27,7 +28,7 @@
 
     // base unrealated    
 
-    new THREE.GLTFLoader().load('../assets/zeldas_moon/bin/scene.glb', function (gltf) {
+    new THREE.GLTFLoader().load('../assets/zeldas_moon.glb', function (gltf) {
         scene.add(gltf.scene);
     }, undefined, function (error) {
         console.error(error);
@@ -35,12 +36,8 @@
 
     function animate() {
         controls.update();
-        render();
-        requestAnimationFrame(animate);
-    }
-
-    function render() {
         renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     }
 
     animate();
