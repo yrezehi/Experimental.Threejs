@@ -25,16 +25,15 @@
     controls.enableZoom = false;
     controls.enabled = true;
     controls.enableDamping = true;
-    controls.minPolarAngle = 0.8;
+    controls.minPolarAngle = 1;
     controls.maxPolarAngle = 2.4;
-    controls.dampingFactor = 0.07;
-    controls.rotateSpeed = 0.07;
+    controls.dampingFactor = 0.14;
+    controls.rotateSpeed = 0.4;
     controls.target.set(0, 0, 0);
 
     document.body.appendChild(renderer.domElement);
 
     document.addEventListener('mousemove', function(event) {
-        console.log(controls);
         controls.handleMouseMoveRotate(event);
     }, false);
 
