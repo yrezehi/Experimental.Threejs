@@ -37,7 +37,7 @@
         controls.handleMouseMoveRotate({ clientX: (event.clientX - (window.innerWidth * 0.5)) , clientY: event.clientY });
     }, false);
 
-    new THREE.GLTFLoader().load('../assets/zeldas_moon.glb', function (gltf) {
+    new THREE.GLTFLoader().load('../../assets/zeldas_moon.glb', function (gltf) {
         scene.add(gltf.scene);
     }, undefined, function (error) {
         console.error(error);
