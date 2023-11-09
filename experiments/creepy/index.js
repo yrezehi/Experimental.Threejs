@@ -2,6 +2,8 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x00000);
 
+    const enviromentPaths = ["_front", "_back", "_up", "_down", "_right", "_left"].map(side => "bbg" + side + ".jgp");
+
     const ambientLight = new THREE.AmbientLight(0x1c1c1c);
     ambientLight.intensity = 4;
     scene.add(ambientLight);
