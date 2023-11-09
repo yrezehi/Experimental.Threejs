@@ -5,9 +5,8 @@
     ambientLight.intensity = 4;
     scene.add(ambientLight);
 
-
-    var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,30000);
-    camera.position.set(-900,-200,-900);
+    var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 45, 30000);
+    camera.position.set(0, 0, 1000);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
@@ -33,23 +32,35 @@
 
     document.body.appendChild(renderer.domElement);
 
-    const enviromentPaths = ["_front", "_back", "_up", "_down", "_right", "_left"].map(side => "../../assets/full-moon-map/bbg" + side + ".jpg");
+    const enviromentPaths = ["_front", "_back", "_left", "_down", "_up", "_right"].map(side => "../../assets/full-moon-map/bbg" + side + ".jpg");
 
-    scene.add(new THREE.Mesh(new THREE.BoxGeometry(10000, 10000, 10000), enviromentPaths.map(image => 
-        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image), side: THREE.BackSide })
-    )));
+    scene.add(new THREE.Mesh(new THREE.BoxGeometry(10000, 10000, 10000), enviromentPaths.map(image => {
+        image = new THREE.TextureLoader().load(image);
 
-    document.addEventListener('mousemove', function(event) {
-        controls.handleMouseMoveRotate({ clientX: (event.clientX - (window.innerWidth * 0.5)) , clientY: event.clientY });
+        image.mapping = THREE.EquirectangularReflectionMapping;
+        image.encoding = THREE.sRGBEncoding;
+        image.minFilter = THREE.LinearFilter;
+        image.magFilter = THREE.LinearFilter;
+
+        return new THREE.MeshBasicMaterial({ map: image, side: THREE.BackSide })
+    })));
+
+    document.addEventListener('mousemove', function (event) {
+        controls.handleMouseMoveRotate({ clientX: (event.clientX - (window.innerWidth * 0.5)), clientY: event.clientY });
     }, false);
 
     new THREE.GLTFLoader().load('../../assets/zeldas_moon.glb', function (gltf) {
+        gltf.scene.scale.set(50, 50, 50);
+
+        gltf.scene.position.x = 0;
+        gltf.scene.position.y = 0;
+
         scene.add(gltf.scene);
     }, undefined, function (error) {
         console.error(error);
     });
 
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         camera.aspect = window.innerWidth / window.innerHeight
         camera.updateProjectionMatrix()
         renderer.setSize(window.innerWidth, window.innerHeight)
@@ -62,7 +73,7 @@
         requestAnimationFrame(animate);
     }
 
-    document.addEventListener("DOMContentLoaded", function(event) { 
+    document.addEventListener("DOMContentLoaded", function (event) {
         animate();
     });
 })();
