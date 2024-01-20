@@ -42,7 +42,7 @@
         image.minFilter = THREE.LinearFilter;
         image.magFilter = THREE.LinearFilter;
 
-        return new THREE.MeshBasicMaterial({ map: image, side: THREE.BackSide })
+        return new THREE.MeshBasicMaterial({ map: image, side: THREE.BackSide });
     })));
 
     document.addEventListener('mousemove', function (event) {
