@@ -1,12 +1,9 @@
 (function () {
     const scene = new THREE.Scene();
-
-    const ambientLight = new THREE.AmbientLight(0x1c1c1c);
-    ambientLight.intensity = 4;
-    scene.add(ambientLight);
+    scene.background = new THREE.Color(0xf2f2f2);
 
     var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 45, 30000);
-    camera.position.set(0, 0, 1000);
+    camera.position.set(0, 0, 200);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
@@ -36,11 +33,16 @@
         controls.handleMouseMoveRotate({ clientX: (event.clientX - (window.innerWidth * 0.5)), clientY: event.clientY });
     }, false);
 
+    var animationMixer = null;
+
     new THREE.GLTFLoader().load('../../assets/shadeless_godzilla.glb', function (gltf) {
         gltf.scene.scale.set(50, 50, 50);
 
         gltf.scene.position.x = 0;
-        gltf.scene.position.y = 0;
+        gltf.scene.position.y = -50;
+
+        animationMixer = new THREE.AnimationMixer(gltf.scene)
+        animationMixer.clipAction(gltf.animations[0]).play()
 
         scene.add(gltf.scene);
     }, undefined, function (error) {
@@ -54,9 +56,15 @@
         renderer.render(scene, camera);
     }, false);
 
+    const threeClock = new THREE.Clock()
+
     function animate() {
         controls.update();
         renderer.render(scene, camera);
+
+        if(animationMixer != null)
+            animationMixer.update(threeClock.getDelta())
+
         requestAnimationFrame(animate);
     }
 
